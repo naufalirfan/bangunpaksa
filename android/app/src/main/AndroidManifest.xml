@@ -58,8 +58,11 @@
 
     <!-- Anti-Cheat Overlay Service -->
     <service android:name=".AntiCheatOverlayService"
-      android:foregroundServiceType="systemAlertWindow"
-      android:exported="false"/>
+      android:foregroundServiceType="specialUse"
+      android:exported="false">
+      <property android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+        android:value="alarm_anticheat_overlay"/>
+    </service>
 
     <!-- Power Menu Accessibility Service -->
     <service android:name=".PowerMenuAccessibilityService"
