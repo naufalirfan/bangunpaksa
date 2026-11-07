@@ -158,7 +158,7 @@ class AntiCheatModule(private val reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun enableScreenPinning(enabled: Boolean, promise: Promise) {
-        val activity = currentActivity
+        val activity = reactContext.currentActivity
         if (activity == null) {
             promise.resolve(false)
             return
@@ -181,7 +181,7 @@ class AntiCheatModule(private val reactContext: ReactApplicationContext) :
 
     @ReactMethod
     fun isScreenPinned(promise: Promise) {
-        val activity = currentActivity
+        val activity = reactContext.currentActivity
         if (activity == null || Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
             promise.resolve(pinned)
             return

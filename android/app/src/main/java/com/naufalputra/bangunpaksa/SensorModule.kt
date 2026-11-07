@@ -32,9 +32,9 @@ class SensorModule(private val reactContext: ReactApplicationContext) :
     override fun getName(): String = "SensorModule"
 
     override fun getConstants(): MutableMap<String, Any> = mutableMapOf(
-        "HAS_ACCELEROMETER" to sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null,
-        "HAS_STEP_COUNTER" to sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null,
-        "HAS_STEP_DETECTOR" to sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR) != null,
+        "HAS_ACCELEROMETER" to (sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER) != null),
+        "HAS_STEP_COUNTER" to (sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null),
+        "HAS_STEP_DETECTOR" to (sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR) != null),
     )
 
     @ReactMethod
@@ -100,7 +100,7 @@ class SensorModule(private val reactContext: ReactApplicationContext) :
                 )
                 emitter.emit(EVENT_ACCELEROMETER, payload)
                 // Simple shake detection: magnitude > 15 m/s²
-                val mag = Math.sqrt(event.values[0]*event.values[0] + event.values[1]*event.values[1] + event.values[2]*event.values[2])
+                val mag = Math.sqrt((event.values[0]*event.values[0] + event.values[1]*event.values[1] + event.values[2]*event.values[2]).toDouble())
                 if (mag > 15.0) {
                     emitter.emit(EVENT_SHAKE, mapOf("magnitude" to mag, "timestamp" to event.timestamp))
                 }
