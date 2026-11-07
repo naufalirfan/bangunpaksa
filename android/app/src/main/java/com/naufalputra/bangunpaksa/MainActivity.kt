@@ -1,4 +1,4 @@
-package com.bangunpaksa
+package com.naufalputra.bangunpaksa
 
 import android.os.Build
 import android.os.Bundle

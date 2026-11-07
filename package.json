@@ -3,10 +3,37 @@
   "version": "1.0.0",
   "main": "index.js",
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^3.1.1",
+    "@react-native-picker/picker": "^2.11.4",
+    "@react-navigation/bottom-tabs": "^7.21.0",
+    "@react-navigation/native": "^7.5.1",
+    "@react-navigation/stack": "^7.12.1",
     "expo": "~58.0.23",
+    "expo-av": "^16.0.8",
+    "expo-background-fetch": "^58.0.12",
+    "expo-barcode-scanner": "^13.0.1",
+    "expo-battery": "^58.0.3",
+    "expo-brightness": "^58.0.2",
+    "expo-build-properties": "^58.0.12",
+    "expo-camera": "^58.0.14",
+    "expo-device": "^58.0.5",
+    "expo-haptics": "^58.0.7",
+    "expo-image-picker": "^58.0.10",
+    "expo-keep-awake": "^58.0.3",
+    "expo-notifications": "^58.1.8",
+    "expo-secure-store": "^58.0.2",
+    "expo-sensors": "^58.0.4",
+    "expo-speech": "^58.0.3",
     "expo-status-bar": "~58.0.4",
+    "expo-task-manager": "^58.0.13",
     "react": "19.3.0",
-    "react-native": "0.88.1"
+    "react-native": "0.88.1",
+    "react-native-gesture-handler": "^3.4.0",
+    "react-native-mmkv": "^4.3.2",
+    "react-native-reanimated": "^4.7.1",
+    "react-native-safe-area-context": "^5.11.1",
+    "react-native-screens": "^4.30.1",
+    "zustand": "^5.0.16"
   },
   "publishConfig": {
     "executableFiles": [
@@ -19,5 +46,8 @@
     "ios": "expo run:ios",
     "web": "expo start --web"
   },
-  "private": true
+  "private": true,
+  "devDependencies": {
+    "@babel/plugin-proposal-decorators": "^7.25.9"
+  }
 }

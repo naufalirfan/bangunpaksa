@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">bangunpaksa</string>
+  <string name="app_name">BangunPaksa</string>
+  <string name="accessibility_service_description">BangunPaksa memerlukan layanan aksesibilitas untuk mendeteksi dan menutup menu power/system dialog saat alarm berbunyi.</string>
+  <string name="device_admin_description">BangunPaksa memerlukan izin admin perangkat untuk mencegah uninstall aplikasi dan mengunci layar saat alarm aktif.</string>
 </resources>
