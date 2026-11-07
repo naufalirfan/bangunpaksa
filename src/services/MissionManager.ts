@@ -1,6 +1,5 @@
 import { Platform, NativeModules } from 'react-native';
 import { Camera } from 'expo-camera';
-import * as Camera from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import { Accelerometer, Pedometer } from 'expo-sensors';
 import * as Haptics from 'expo-haptics';
@@ -56,7 +55,6 @@ class MissionManager {
   private photoReferenceUri: string | null = null;
 
   async initialize(): Promise<void> {
-    await Camera.requestCameraPermissionsAsync();
     const { status } = await Camera.requestCameraPermissionsAsync();
     if (status !== 'granted') {
       console.warn('Camera permission not granted');
