@@ -129,6 +129,7 @@ export default function AlarmSetupScreen() {
   };
 
   return (
+    <>
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
@@ -367,6 +368,7 @@ export default function AlarmSetupScreen() {
           </TouchableOpacity>
         </View>
       </View>
+    </Modal>
 
     <Modal visible={showSoundPicker} animationType="slide" transparent>
       <View style={styles.modalOverlay}>
@@ -404,6 +406,7 @@ export default function AlarmSetupScreen() {
         </View>
       </View>
     </Modal>
+    </>
   );
 }
 

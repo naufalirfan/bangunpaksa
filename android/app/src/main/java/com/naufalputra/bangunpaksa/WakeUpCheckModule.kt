@@ -19,7 +19,10 @@ class WakeUpCheckModule(private val reactContext: ReactApplicationContext) :
 
     override fun getConstants(): MutableMap<String, Any> = mutableMapOf(
         "HAS_VIBRATOR" to vibrator.hasVibrator(),
-        "HAS_AMPLITUDE_CONTROL" -> android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O && vibrator.hasAmplitudeControl()
+        "HAS_AMPLITUDE_CONTROL" to (
+            android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O &&
+                vibrator.hasAmplitudeControl()
+            )
     )
 
     @ReactMethod

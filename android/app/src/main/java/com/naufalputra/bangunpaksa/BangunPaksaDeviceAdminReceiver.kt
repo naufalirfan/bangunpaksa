@@ -35,8 +35,4 @@ class BangunPaksaDeviceAdminReceiver : DeviceAdminReceiver() {
         super.onLockTaskModeExiting(context, intent)
         Log.d("BangunPaksa", "Lock task mode exiting")
     }
-
-    override fun onReceive(context: Context?, intent: Intent?): CharSequence? {
-        return super.onReceive(context, intent)
-    }
 }

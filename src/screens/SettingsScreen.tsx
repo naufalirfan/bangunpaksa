@@ -85,6 +85,7 @@ export default function SettingsScreen() {
   );
 
   return (
+    <>
     <ScrollView style={styles.container} contentContainerStyle={styles.content}>
       {/* General Settings */}
       <View style={styles.section}>
@@ -466,11 +467,9 @@ export default function SettingsScreen() {
         </View>
       </View>
     </Modal>
+    </>
   );
 }
-
-// Need to import TextInput, Switch
-// Add at top: import { ..., TextInput, Switch } from 'react-native';
 
 const styles = StyleSheet.create({
   container: {

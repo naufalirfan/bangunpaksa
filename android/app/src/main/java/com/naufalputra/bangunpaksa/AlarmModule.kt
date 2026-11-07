@@ -35,10 +35,11 @@ class AlarmModule(private val reactContext: ReactApplicationContext) :
             alarmManager.canScheduleExactAlarms()
         else true
 
-    private fun pendingIntentFor(id: String, flags: Int): PendingIntent {
+    private fun pendingIntentFor(id: String, flags: Int, optionsJson: String = "{}"): PendingIntent? {
         val intent = Intent(reactContext, AlarmReceiver::class.java).apply {
             action = ACTION_ALARM
             putExtra("alarmId", id)
+            putExtra("options", optionsJson)
         }
         return PendingIntent.getBroadcast(
             reactContext,
@@ -52,7 +53,6 @@ class AlarmModule(private val reactContext: ReactApplicationContext) :
     fun setExactAlarm(id: String, triggerTimestamp: Double, options: ReadableMap, promise: Promise) {
         try {
             val triggerAt = triggerTimestamp.toLong()
-            val pi = pendingIntentFor(id, PendingIntent.FLAG_UPDATE_CURRENT)
 
             // Persist options (label, mission, antiCheat) for the receiver.
             val opts = JSONObject()
@@ -67,6 +67,9 @@ class AlarmModule(private val reactContext: ReactApplicationContext) :
                 }
             }
             persistAlarm(id, triggerAt, opts)
+
+            val pi = pendingIntentFor(id, PendingIntent.FLAG_UPDATE_CURRENT, opts.toString())
+                ?: return promise.reject("E_ALARM_SET", "PendingIntent null")
 
             if (canScheduleExact()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

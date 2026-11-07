@@ -33,8 +33,12 @@ class AntiCheatModule(private val reactContext: ReactApplicationContext) :
         @Volatile var instance: AntiCheatModule? = null
 
         fun emitGlobal(event: String, payload: Any?) {
-            instance?.emit(event, payload)
+            instance?.emitEvent(event, payload)
         }
+    }
+
+    fun emitEvent(event: String, payload: Any?) {
+        emit(event, payload)
     }
 
     private var volumeObserver: ContentObserver? = null
@@ -62,7 +66,7 @@ class AntiCheatModule(private val reactContext: ReactApplicationContext) :
         try {
             reactContext
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
-                .emit(event, payload)
+                ?.emit(event, payload)
         } catch (_: Exception) {
         }
     }
@@ -123,11 +127,7 @@ class AntiCheatModule(private val reactContext: ReactApplicationContext) :
             action = if (show) AntiCheatOverlayService.ACTION_SHOW else AntiCheatOverlayService.ACTION_HIDE
         }
         if (show) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                reactContext.startForegroundService(intent)
-            } else {
-                reactContext.startService(intent)
-            }
+            reactContext.startService(intent)
         } else {
             reactContext.stopService(intent)
         }

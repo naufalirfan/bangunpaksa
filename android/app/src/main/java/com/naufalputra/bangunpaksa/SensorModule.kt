@@ -89,7 +89,7 @@ class SensorModule(private val reactContext: ReactApplicationContext) :
 
     override fun onSensorChanged(event: SensorEvent?) {
         if (!listenersActive || event == null) return
-        val emitter = reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java)
+        val emitter = reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter::class.java) ?: return
         when (event.sensor.type) {
             Sensor.TYPE_ACCELEROMETER -> {
                 val payload = mapOf(
@@ -124,9 +124,14 @@ class SensorModule(private val reactContext: ReactApplicationContext) :
     @ReactMethod
     fun removeListeners(count: Int) {}
 
-    override fun onCatalystInstanceDestroy() {
-        super.onCatalystInstanceDestroy()
-        stopAccelerometer(Promise { _, _ -> })
-        stopStepCounter(Promise { _, _ -> })
+    override fun invalidate() {
+        accelerometer?.let { sensorManager.unregisterListener(this, it) }
+        accelerometer = null
+        stepCounter?.let { sensorManager.unregisterListener(this, it) }
+        stepDetector?.let { sensorManager.unregisterListener(this, it) }
+        stepCounter = null
+        stepDetector = null
+        listenersActive = false
+        super.invalidate()
     }
 }

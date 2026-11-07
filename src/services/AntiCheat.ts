@@ -1,7 +1,8 @@
-import { Platform, NativeModules } from 'react-native';
+import { Platform, NativeModules, NativeEventEmitter } from 'react-native';
 import { useAlarmStore } from '../store/alarmStore';
 
 const { AntiCheatModule, AudioEngineModule } = NativeModules;
+const antiCheatEmitter = AntiCheatModule ? new NativeEventEmitter(AntiCheatModule) : null;
 
 export type AntiCheatLevel = 'standard' | 'hardcore';
 
@@ -52,23 +53,27 @@ class AntiCheat {
   }
 
   private setupSystemListeners(): void {
-    if (!AntiCheatModule) return;
+    if (!AntiCheatModule || !antiCheatEmitter) return;
 
-    AntiCheatModule.addVolumeChangeListener((volume: number) => {
-      if (this.isActive && this.config.lockVolume && volume < 100) {
+    antiCheatEmitter.addListener('volumeChange', (volume: any) => {
+      if (this.isActive && this.config.lockVolume && Number(volume) < 100) {
         this.restoreMaxVolume();
       }
     });
 
-    AntiCheatModule.addPowerMenuListener(() => {
+    antiCheatEmitter.addListener('powerMenu', () => {
       if (this.isActive && this.config.blockPowerMenu) {
         this.blockPowerMenu();
       }
     });
 
-    this.rebootListener = AntiCheatModule.addBootCompletedListener(() => {
+    this.rebootListener = antiCheatEmitter.addListener('bootCompleted', () => {
       this.handleRebootRecovery();
     });
+
+    AntiCheatModule.addVolumeChangeListener();
+    AntiCheatModule.addPowerMenuListener();
+    AntiCheatModule.addBootCompletedListener();
   }
 
   async activate(config?: Partial<AntiCheatConfig>): Promise<void> {
