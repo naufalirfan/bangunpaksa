@@ -12,12 +12,19 @@
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
-    "assetBundlePatterns": ["**/*"],
+    "assetBundlePatterns": [
+      "**/*"
+    ],
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.naufalputra.bangunpaksa",
       "infoPlist": {
-        "UIBackgroundModes": ["audio", "location", "fetch", "processing"],
+        "UIBackgroundModes": [
+          "audio",
+          "location",
+          "fetch",
+          "processing"
+        ],
         "NSMicrophoneUsageDescription": "Aplikasi memerlukan akses mikrofon untuk rekaman suara kustom alarm",
         "NSCameraUsageDescription": "Aplikasi memerlukan akses kamera untuk misi scan barcode dan foto objek",
         "NSPhotoLibraryUsageDescription": "Aplikasi memerlukan akses galeri untuk memilih foto referensi misi",
@@ -69,7 +76,6 @@
     },
     "plugins": [
       "expo-camera",
-      "expo-barcode-scanner",
       "expo-av",
       "expo-notifications",
       "expo-sensors",
@@ -84,7 +90,9 @@
             "compileSdkVersion": 36,
             "targetSdkVersion": 36,
             "minSdkVersion": 26,
-            "extraMavenRepos": ["https://maven.google.com"],
+            "extraMavenRepos": [
+              "https://maven.google.com"
+            ],
             "enableProguardInReleaseBuilds": false,
             "enableShrinkResourcesInReleaseBuilds": false
           }

@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Alert, Platform } from 'react-native';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Camera } from 'expo-camera';
-import * as BarCodeScanner from 'expo-barcode-scanner';
+import { CameraView, Camera } from 'expo-camera';
 import * as Haptics from 'expo-haptics';
 import { missionManager } from '../services/MissionManager';
 import { audioEngine } from '../services/AudioEngine';
@@ -21,7 +20,7 @@ export default function MissionCameraScreen() {
   const [scanned, setScanned] = useState(false);
   const [flashOn, setFlashOn] = useState(true);
   const [smartMuteTime, setSmartMuteTime] = useState(15);
-  const cameraRef = useRef<Camera>(null);
+  const cameraRef = useRef<CameraView>(null);
   const [smartMuteInterval, setSmartMuteInterval] = useState<any>(null);
 
   useEffect(() => {
@@ -36,13 +35,6 @@ export default function MissionCameraScreen() {
   const requestPermissions = async () => {
     const { status } = await Camera.requestCameraPermissionsAsync();
     setHasPermission(status === 'granted');
-    
-    if (status === 'granted') {
-      const barcodePerm = await BarCodeScanner.requestPermissionsAsync();
-      if (barcodePerm.status !== 'granted') {
-        Alert.alert('Izin Diperlukan', 'Izin kamera diperlukan untuk misi scan barcode');
-      }
-    }
   };
 
   const startSmartMuteTimer = () => {
@@ -100,6 +92,17 @@ export default function MissionCameraScreen() {
     }
   };
 
+  const capturePhoto = async () => {
+    if (!cameraRef.current || scanned) return;
+    try {
+      const photo = await cameraRef.current.takePictureAsync({ quality: 0.6 });
+      if (photo) await handlePhotoTaken(photo);
+    } catch (e) {
+      console.error(e);
+      setScanned(false);
+    }
+  };
+
   const handleEmergencyBypass = () => {
     Alert.alert(
       'Misi Darurat',
@@ -133,14 +136,14 @@ export default function MissionCameraScreen() {
 
   return (
     <View style={styles.container}>
-      <Camera
+      <CameraView
         ref={cameraRef}
         style={styles.camera}
-        type={Camera.Constants.Type.back}
-        flashMode={flashOn ? Camera.Constants.FlashMode.torch : Camera.Constants.FlashMode.off}
-        onBarCodeScanned={missionType === 'barcode' ? handleBarcodeScanned : undefined}
-        barCodeScannerSettings={{
-          barCodeTypes: [BarCodeScanner.BarCodeType.qr, BarCodeScanner.BarCodeType.ean13, BarCodeScanner.BarCodeType.ean8, BarCodeScanner.BarCodeType.code128],
+        facing="back"
+        enableTorch={flashOn}
+        onBarcodeScanned={missionType === 'barcode' && !scanned ? handleBarcodeScanned : undefined}
+        barcodeScannerSettings={{
+          barcodeTypes: ['qr', 'ean13', 'ean8', 'code128'],
         }}
       >
         {/* Overlay UI */}
@@ -183,12 +186,19 @@ export default function MissionCameraScreen() {
             <Text style={styles.emergencyText}>Ganti Misi Darurat (200x Shake)</Text>
           </TouchableOpacity>
 
+          {/* Shutter (photo mission) */}
+          {missionType === 'photo' && (
+            <TouchableOpacity style={styles.shutterButton} onPress={capturePhoto}>
+              <View style={styles.shutterInner} />
+            </TouchableOpacity>
+          )}
+
           {/* Flash Toggle */}
           <TouchableOpacity style={styles.flashButton} onPress={() => setFlashOn(!flashOn)}>
             <Text style={styles.flashText}>{flashOn ? '🔦 Senter: ON' : '🔦 Senter: OFF'}</Text>
           </TouchableOpacity>
         </View>
-      </Camera>
+      </CameraView>
     </View>
   );
 }
@@ -317,6 +327,23 @@ const styles = StyleSheet.create({
     color: '#FFD700',
     textDecorationLine: 'underline',
     textAlign: 'center',
+  },
+  shutterButton: {
+    alignSelf: 'center',
+    width: 72,
+    height: 72,
+    borderRadius: 36,
+    borderWidth: 4,
+    borderColor: '#FFF',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 16,
+  },
+  shutterInner: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    backgroundColor: '#FFF',
   },
   flashButton: {
     alignSelf: 'center',
